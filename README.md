@@ -1,4 +1,4 @@
-# Touhou Little Maid: Tell Maids
+# Touhou Little Maid: Maid Command Chat
 [![Available on GitHub](https://wsrv.nl/?url=https%3A%2F%2Fcdn.jsdelivr.net%2Fnpm%2F%40intergrav%2Fdevins-badges%403%2Fassets%2Fcozy%2Favailable%2Fgithub_vector.svg&n=-1) ](https://github.com/Steven23334/Maid_Command_Chat)
 [![Available for Touhou Little Maid](https://cdn.modrinth.com/data/cached_images/ea5dc160571134bd0ea89ac52075b542fb331e46_0.webp)](https://modrinth.com/project/R0bDWFAW)
 
