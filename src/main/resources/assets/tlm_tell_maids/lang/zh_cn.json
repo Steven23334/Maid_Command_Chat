@@ -1,0 +1,7 @@
+{
+  "command.tlm_tell_maids.maid_not_found": "附近未找到名为 '%s' 的女仆。",
+  "command.tlm_tell_maids.not_your_maid": "女仆 '%s' 不属于你。",
+  "command.tlm_tell_maids.missing_message": "请提供要发送给女仆的消息。",
+  "command.tlm_tell_maids.bad_quote": "女仆名字的引号没有闭合。",
+  "chat.tlm_tell_maids.sent": "<%s → %s> %s"
+}

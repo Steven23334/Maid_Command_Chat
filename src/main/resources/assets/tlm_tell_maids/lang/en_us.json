@@ -1,0 +1,7 @@
+{
+  "command.tlm_tell_maids.maid_not_found": "No maid named '%s' found nearby.",
+  "command.tlm_tell_maids.not_your_maid": "The maid '%s' does not belong to you.",
+  "command.tlm_tell_maids.missing_message": "Please provide a message to send to the maid.",
+  "command.tlm_tell_maids.bad_quote": "Unclosed quote in maid name.",
+  "chat.tlm_tell_maids.sent": "<%s → %s> %s"
+}
