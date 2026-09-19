@@ -7,10 +7,9 @@ import com.mojang.brigadier.arguments.StringArgumentType;
 import com.mojang.brigadier.context.CommandContext;
 import com.mojang.brigadier.exceptions.CommandSyntaxException;
 import com.mojang.brigadier.exceptions.DynamicCommandExceptionType;
-import com.mojang.brigadier.exceptions.SimpleCommandExceptionType;
 import com.mojang.brigadier.suggestion.Suggestions;
 import com.mojang.brigadier.suggestion.SuggestionsBuilder;
-import net.minecraft.ChatFormatting;                                     // ★ 新增
+import net.minecraft.ChatFormatting;
 import net.minecraft.commands.CommandSourceStack;
 import net.minecraft.commands.Commands;
 import net.minecraft.network.chat.Component;
@@ -32,64 +31,22 @@ public class TellMaidCommand {
             new DynamicCommandExceptionType(
                     name -> Component.translatable("command.tlm_tell_maids.not_your_maid", name));
 
-    private static final SimpleCommandExceptionType ERROR_MISSING_MESSAGE =
-            new SimpleCommandExceptionType(
-                    Component.translatable("command.tlm_tell_maids.missing_message"));
-
-    private static final SimpleCommandExceptionType ERROR_BAD_QUOTE =
-            new SimpleCommandExceptionType(
-                    Component.translatable("command.tlm_tell_maids.bad_quote"));
-
     public static void register(CommandDispatcher<CommandSourceStack> dispatcher) {
         dispatcher.register(
                 Commands.literal("tellmaid")
                         .requires(source -> source.hasPermission(0))
-                        .then(Commands.argument("args", StringArgumentType.greedyString())
+                        .then(Commands.argument("maid", StringArgumentType.string())
                                 .suggests(TellMaidCommand::suggestMaidNames)
-                                .executes(TellMaidCommand::exec)
+                                .then(Commands.argument("message", StringArgumentType.greedyString())
+                                        .executes(TellMaidCommand::exec)
+                                )
                         )
         );
     }
 
     /**
-     * 从整段输入中解析出 maidName 和 message。
-     * 支持：
-     *   /tellmaid 酒狐 你好
-     *   /tellmaid "My Maid" hello
-     */
-    private static String[] splitArgs(String args) throws CommandSyntaxException {
-        String trimmed = args.trim();
-        if (trimmed.isEmpty()) {
-            throw ERROR_MISSING_MESSAGE.create();
-        }
-
-        String maidName;
-        String rest;
-
-        if (trimmed.charAt(0) == '"') {
-            int close = trimmed.indexOf('"', 1);
-            if (close < 0) {
-                throw ERROR_BAD_QUOTE.create();
-            }
-            maidName = trimmed.substring(1, close);
-            rest = trimmed.substring(close + 1).trim();
-        } else {
-            int space = trimmed.indexOf(' ');
-            if (space < 0) {
-                throw ERROR_MISSING_MESSAGE.create();
-            }
-            maidName = trimmed.substring(0, space);
-            rest = trimmed.substring(space + 1).trim();
-        }
-
-        if (maidName.isEmpty() || rest.isEmpty()) {
-            throw ERROR_MISSING_MESSAGE.create();
-        }
-        return new String[]{maidName, rest};
-    }
-
-    /**
      * 补全女仆名字。
+     * 名字含非 ASCII 字符（中文、破折号、空格等）时补成带引号的形式。
      */
     private static CompletableFuture<Suggestions> suggestMaidNames(
             CommandContext<CommandSourceStack> context,
@@ -100,24 +57,13 @@ public class TellMaidCommand {
             return builder.buildFuture();
         }
 
-        String remaining = builder.getRemainingLowerCase();
-        String prefix = remaining;
-        int space = remaining.indexOf(' ');
-        if (space >= 0) {
-            prefix = remaining.substring(0, space);
+        String prefix = builder.getRemainingLowerCase();
+        boolean forceQuote = prefix.startsWith("\"");
+        if (forceQuote) {
+            prefix = prefix.substring(1);
         }
 
-        int quoteCount = 0;
-        for (int i = 0; i < prefix.length(); i++) {
-            if (prefix.charAt(i) == '"') {
-                quoteCount++;
-            }
-        }
-        boolean forceQuote = quoteCount >= 1;
-
-        String matchPrefix = prefix.replace("\"", "");
-
-        final String p = matchPrefix;
+        final String p = prefix;
         final boolean forceQ = forceQuote;
 
         level.getEntitiesOfClass(EntityMaid.class,
@@ -139,6 +85,10 @@ public class TellMaidCommand {
         return builder.buildFuture();
     }
 
+    /**
+     * 判断名字是否超出 Brigadier 默认 word 字符集 [a-zA-Z0-9_]，
+     * 超出则需要用双引号包裹才能被命令解析。
+     */
     private static boolean needsQuoting(String name) {
         if (name.isEmpty()) {
             return true;
@@ -156,10 +106,8 @@ public class TellMaidCommand {
     }
 
     private static int exec(CommandContext<CommandSourceStack> context) throws CommandSyntaxException {
-        String args = StringArgumentType.getString(context, "args");
-        String[] parsed = splitArgs(args);
-        String maidName = parsed[0];
-        String messageText = parsed[1];
+        String maidName = StringArgumentType.getString(context, "maid");
+        String messageText = StringArgumentType.getString(context, "message");
 
         ServerPlayer player = context.getSource().getPlayerOrException();
         if (!(player.level() instanceof ServerLevel level)) {
@@ -178,7 +126,7 @@ public class TellMaidCommand {
             throw ERROR_NOT_YOUR_MAID.create(maidName);
         }
 
-        // ★ 在玩家自己的聊天栏显示灰色「已发送」，带玩家名字
+        // 在玩家自己的聊天栏显示灰色「已发送」，带玩家名字
         player.sendSystemMessage(
                 Component.translatable("chat.tlm_tell_maids.sent",
                                 player.getName().getString(), maidName, messageText)
