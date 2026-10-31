@@ -2,6 +2,11 @@
   "command.tlm_tell_maids.maid_not_found": "附近未找到名为 '%s' 的女仆。",
   "command.tlm_tell_maids.not_your_maid": "女仆 '%s' 不属于你。",
   "command.tlm_tell_maids.missing_message": "请提供要发送给女仆的消息。",
-  "command.tlm_tell_maids.bad_quote": "女仆名字的引号没有闭合。",
+  "command.tlm_tell_maids.bad_quote": "女仆选择器的引号或方括号没有闭合。",
+  "command.tlm_tell_maids.bad_separator": "女仆选择器与消息之间需要用空格分隔。",
+  "command.tlm_tell_maids.empty_name": "女仆名不能为空。",
+  "command.tlm_tell_maids.unknown_selector": "未知的女仆选择器 '%s'，目前只支持 @m。",
+  "command.tlm_tell_maids.no_maid_owned": "%s 格范围内没有属于你的女仆。",
+  "command.tlm_tell_maids.chat_failed": "与女仆 '%s' 开始 AI 对话失败。",
   "chat.tlm_tell_maids.sent": "<%s → %s> %s"
 }

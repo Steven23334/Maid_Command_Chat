@@ -2,6 +2,11 @@
   "command.tlm_tell_maids.maid_not_found": "No maid named '%s' found nearby.",
   "command.tlm_tell_maids.not_your_maid": "The maid '%s' does not belong to you.",
   "command.tlm_tell_maids.missing_message": "Please provide a message to send to the maid.",
-  "command.tlm_tell_maids.bad_quote": "Unclosed quote in maid name.",
+  "command.tlm_tell_maids.bad_quote": "Unclosed quote or bracket in the maid selector.",
+  "command.tlm_tell_maids.bad_separator": "Please separate the maid selector and the message with a space.",
+  "command.tlm_tell_maids.empty_name": "Maid names cannot be empty.",
+  "command.tlm_tell_maids.unknown_selector": "Unknown maid selector '%s'. Only @m is supported.",
+  "command.tlm_tell_maids.no_maid_owned": "You have no maids within %s blocks.",
+  "command.tlm_tell_maids.chat_failed": "Failed to start an AI chat with the maid '%s'.",
   "chat.tlm_tell_maids.sent": "<%s → %s> %s"
 }

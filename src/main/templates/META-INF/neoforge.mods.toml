@@ -47,7 +47,8 @@ logoFile="icon.png"
 
 # The description text for the mod (multi line!) (#mandatory)
 description='''
-Example mod description.
+This is an addon for the Touhou Little Maid mod. It adds a `/tellmaid` command that lets you chat with your maid's AI directly from the chat bar, without opening any GUI.
+这是一个为 车万女仆 (Touhou Little Maid) 模组开发的拓展，添加了一条 `/tellmaid` 指令，让你可以直接从聊天栏和女仆的 AI 对话，无需打开任何界面。
 '''
 
 # The [[mixins]] block allows you to declare your mixin config to FML so that it gets loaded.
